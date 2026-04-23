@@ -1,15 +1,19 @@
-# Stage 1: Build React App
+# Build Stage
 FROM node:18 AS build
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copy package files
+COPY package.json ./
 RUN npm install
 
+# Copy remaining files
 COPY . .
+
+# Build React app
 RUN npm run build
 
-# Stage 2: Serve with Nginx
+# Production Stage
 FROM nginx:alpine
 
 COPY --from=build /app/build /usr/share/nginx/html
